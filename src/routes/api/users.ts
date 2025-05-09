@@ -10,7 +10,7 @@ export const APIRoute = createAPIFileRoute("/api/users")({
       throw new Error("Failed to fetch users");
     }
     // Access CF bindings in API Route
-    const bindings = getBindings();
+    const bindings = await getBindings();
     const deferredCount = await bindings.CACHE.get("queryCount");
 
     const data = (await res.json()) as Array<any>;

@@ -12,7 +12,7 @@ const personServerFn = createServerFn({ method: "GET" })
 const slowServerFn = createServerFn({ method: "GET" })
   .validator((d: string) => d)
   .handler(async ({ data: name }) => {
-    const bindings = getBindings();
+    const bindings = await getBindings();
     const cache = bindings.CACHE;
     const queryCount = (await cache.get("queryCount")) || "0";
     await cache.put("queryCount", String(Number(queryCount) + 1));

@@ -108,16 +108,16 @@ Run `npm run deploy` to deploy your app to Cloudflare Workers.
  * Will only work when being accessed on the server. Obviously, CF bindings are not available in the browser.
  * @returns
  */
-export function getBindings() {
+export async function getBindings() {
   if (import.meta.env.DEV) {
-    const proxyPromise = import("wrangler").then(({ getPlatformProxy }) =>
-      getPlatformProxy().then((proxy) => proxy.env),
-    );
-    return proxyPromise as unknown as CloudflareBindings;
+    const { getPlatformProxy } = await import("wrangler");
+    const { env } = await getPlatformProxy();
+    return env as unknown as CloudflareBindings;
   }
 
   return process.env as unknown as CloudflareBindings;
 }
+
 ```
 
 For CF apps built with Nitro, the CloudflareBindings can be accessed from process.env. There are a few other ways of accessing the bindings, but I ran across some issues with SSR when using getEvent().context.cloudflare.env.
@@ -135,7 +135,7 @@ DEV=true
 
 ### Step 8: Use the getBindings method to access the Cloudflare bindings in server side logic
 ```ts
-const bindings = getBindings();
+const bindings = await getBindings();
 const cache = bindings.CACHE;
 const queryCount = (await cache.get("queryCount")) || "0";
 await cache.put("queryCount", String(Number(queryCount) + 1));
