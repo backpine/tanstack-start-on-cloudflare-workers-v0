@@ -13,9 +13,18 @@
   "kv_namespaces": [
     {
       "binding": "CACHE",
-      "id": "5d8a8ea387f348f7a156ffd98384998c",
+      "id": "243100874d9447bfa10a820bcbf51ede",
     },
   ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "Counter",
+        "name": "DO",
+        "script_name": "durable-object-counter",
+      },
+    ],
+  },
   "routes": [
     {
       "custom_domain": true,
